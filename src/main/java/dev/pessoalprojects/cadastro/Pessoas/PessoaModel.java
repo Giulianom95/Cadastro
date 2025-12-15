@@ -7,23 +7,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "cadastro_de_pessoa")
+@Table(name = "tb_cadastro_de_pessoa")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 
 public class PessoaModel {
-    @id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @Column(name = "Nome")
     private String nome;
+
     @Column(unique = true)
     private String email;
-    private int idade;
-    @ManyToOne
-    @JoinColumn(name = "Missoes_id")
-    private TarefasModel tarefas;
 
+    @Column(name = "Idade")
+    private int idade;
+    //Um ninja para váris missões.
+    @ManyToOne
+    @JoinColumn(name = "tarefas_id")//Foreing key
+    private TarefasModel tarefas;
 
 
 }
