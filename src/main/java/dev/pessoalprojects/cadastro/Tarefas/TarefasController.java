@@ -5,24 +5,28 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("tarefas")
 public class TarefasController {
-    @GetMapping("/listar")
-    public String mostrarTarefa(){
-        return "Tarefas listadas com sucesso";
-    }
     @PostMapping("/criar")
-    public String criarTarefa(){
+    public String criarTarefa() {
         return "Tarefa criada com sucesso";
     }
-    @PutMapping("/alterarID")
-    public String alterarTarefaPorId(){
-        return "Tarefa Alterada";
+
+    @GetMapping("/listar")
+    public String mostrarTarefa() {
+        return "Tarefas listadas com sucesso";
     }
+
     @GetMapping("/listarID")
-    public String mostrarPorId(){
+    public String mostrarPorId() {
         return "Mostrar tarefa por id";
     }
-    @DeleteMapping("/DeletarID")
-    public String deletarPorId(){
+
+    @PutMapping("/alterarID")
+    public String alterarTarefaPorId() {
+        return "Tarefa Alterada";
+    }
+
+    @DeleteMapping("/deletarID")
+    public String deletarPorId() {
         return "Deletar por id";
     }
 }
