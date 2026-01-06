@@ -1,6 +1,7 @@
 package dev.pessoalprojects.cadastro.Tarefas;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.pessoalprojects.cadastro.Pessoas.PessoaModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,6 @@ public class TarefasModel {
     private String dificuldade;
     // Uma missão pode ter vários ninjas.
     @OneToMany(mappedBy = "tarefas")
+    @JsonIgnore
     private List<PessoaModel> pessoas;
 }
