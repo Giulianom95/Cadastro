@@ -13,14 +13,19 @@ public class PessoaService {
         this.pessoaRepository = pessoaRepository;
     }
 
-    // Listar todas as pessoas
+    //Listar todas as pessoas
     public List<PessoaModel> listarPessoas() {
         return pessoaRepository.findAll();
     }
 
-    // Listar pessoas por id
+    //Listar pessoas por id
     public PessoaModel listarPessoaPorId(Long id) {
         Optional<PessoaModel> pessoaPorId = pessoaRepository.findById(id);
         return pessoaPorId.orElse(null);
+    }
+
+    //Criar pessoa
+    public PessoaModel criarPessoa(PessoaModel pessoa) {
+        return pessoaRepository.save(pessoa);
     }
 }
