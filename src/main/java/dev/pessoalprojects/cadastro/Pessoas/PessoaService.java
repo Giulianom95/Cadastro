@@ -35,12 +35,12 @@ public class PessoaService {
     }
 
     //Atualizar pessoa por id
-    public PessoaModel alterarPessoaPorId(Long id,PessoaModel pessoaAtualizada){
-        if (pessoaRepository.existsById(id)){
+    public PessoaModel alterarPessoaPorId(Long id, PessoaModel pessoaAtualizada) {
+        if (pessoaRepository.existsById(id)) {
             pessoaAtualizada.setId(id);
             return pessoaRepository.save(pessoaAtualizada);
         }
-        return null ;
+        return null;
     }
 
 }
