@@ -28,4 +28,19 @@ public class PessoaService {
     public PessoaModel criarPessoa(PessoaModel pessoa) {
         return pessoaRepository.save(pessoa);
     }
+
+    //Deletar pessoa por id(precisa ser um metodo void)
+    public void deletarPessoaPorId(Long id) {
+        pessoaRepository.deleteById(id);
+    }
+
+    //Atualizar pessoa por id
+    public PessoaModel alterarPessoaPorId(Long id,PessoaModel pessoaAtualizada){
+        if (pessoaRepository.existsById(id)){
+            pessoaAtualizada.setId(id);
+            return pessoaRepository.save(pessoaAtualizada);
+        }
+        return null ;
+    }
+
 }
