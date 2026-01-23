@@ -8,9 +8,11 @@ import java.util.Optional;
 @Service
 public class PessoaService {
     private PessoaRepository pessoaRepository;
+    private PessoaMapper pessoaMapper;
 
-    public PessoaService(PessoaRepository pessoaRepository) {
+    public PessoaService(PessoaRepository pessoaRepository, PessoaMapper pessoaMapper) {
         this.pessoaRepository = pessoaRepository;
+        this.pessoaMapper = pessoaMapper;
     }
 
     //Listar todas as pessoas
@@ -25,8 +27,10 @@ public class PessoaService {
     }
 
     //Criar pessoa
-    public PessoaModel criarPessoa(PessoaModel pessoa) {
-        return pessoaRepository.save(pessoa);
+    public PessoaDTO criarPessoa(PessoaDTO pessoaDTO) {
+        PessoaModel pessoa = pessoaMapper.map(pessoaDTO);
+        pessoa = pessoaRepository.save(pessoa);
+        return pessoaMapper.map(pessoa);
     }
 
     //Deletar pessoa por id(precisa ser um metodo void)

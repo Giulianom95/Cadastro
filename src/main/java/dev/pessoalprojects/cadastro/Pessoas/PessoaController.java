@@ -15,7 +15,7 @@ public class PessoaController {
 
     // Adicionar pessoa(CREATE)
     @PostMapping("/criar")
-    public PessoaModel criarPessoa(@RequestBody PessoaModel pessoa) {
+    public PessoaDTO criarPessoa(@RequestBody PessoaDTO pessoa) {
         return pessoaService.criarPessoa(pessoa);
     }
 
@@ -42,5 +42,4 @@ public class PessoaController {
     public void deletarPessoaPorId(@PathVariable Long id) {
         pessoaService.deletarPessoaPorId(id);
     }
-
 }
