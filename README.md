@@ -350,7 +350,7 @@ Após iniciar a aplicação, acesse:
 
 ### Screenshots do Swagger
 
- <img src="https://raw.githubusercontent.com/Giulianom95/Giulianom95/main/assets/Swagger.jpg" width="1250" style="vertical-align: middle;" /> 
+ <img src="https://raw.githubusercontent.com/Giulianom95/Giulianom95/main/assets/Swagger.jpg" width="1500" style="vertical-align: middle;" /> 
 
 
 ## ⚙️ Configuração
