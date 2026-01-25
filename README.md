@@ -347,13 +347,6 @@ Após iniciar a aplicação, acesse:
 
 **URL:** `http://localhost:8080/swagger-ui/index.html#/`
 
-### Recursos do Swagger
-
-- 📖 Visualização completa de todos os endpoints
-- 🧪 Teste interativo de todas as rotas
-- 📋 Visualização dos modelos de dados (DTOs e Models)
-- 🔍 Documentação automática dos parâmetros e respostas
-- ✅ Validação de requisições em tempo real
 
 ### Screenshots do Swagger
 
