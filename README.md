@@ -357,12 +357,8 @@ Após iniciar a aplicação, acesse:
 
 ### Screenshots do Swagger
 
-> 📸 **Espaço para adicionar screenshots do Swagger UI:**
-> 
-> - Tela inicial do Swagger mostrando todos os endpoints
-> - Exemplo de teste de endpoint de criação de pessoa
-> - Exemplo de teste de endpoint de listagem de tarefas
-> - Visualização dos modelos de dados
+ <img src="https://raw.githubusercontent.com/Giulianom95/Giulianom95/main/assets/Swagger.jpg" width="1200" style="vertical-align: middle;" /> 
+
 
 ## ⚙️ Configuração
 
