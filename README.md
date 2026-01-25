@@ -19,6 +19,8 @@ Este sistema permite o cadastro e gerenciamento de pessoas e tarefas, onde cada 
 - **H2 Database** - Banco de dados em memória
 - **Flyway** - Controle de versão do banco de dados
 - **Lombok** - Redução de boilerplate
+- **SpringDoc OpenAPI (Swagger)** - Documentação interativa da API
+- **Thymeleaf** - Template engine para views
 - **Maven** - Gerenciamento de dependências
 
 ## 📁 Estrutura do Projeto
@@ -32,11 +34,15 @@ Cadastro/
 │   │   │       ├── CadastroApplication.java
 │   │   │       ├── Pessoas/
 │   │   │       │   ├── PessoaModel.java
+│   │   │       │   ├── PessoaDTO.java
+│   │   │       │   ├── PessoaMapper.java
 │   │   │       │   ├── PessoaController.java
 │   │   │       │   ├── PessoaService.java
 │   │   │       │   └── PessoaRepository.java
 │   │   │       └── Tarefas/
 │   │   │           ├── TarefasModel.java
+│   │   │           ├── TarefasDTO.java
+│   │   │           ├── TarefasMapper.java
 │   │   │           ├── TarefasController.java
 │   │   │           ├── TarefasService.java
 │   │   │           └── TarefasRepository.java
@@ -57,6 +63,7 @@ Representa uma pessoa cadastrada no sistema.
 - `nome` (String) - Nome da pessoa
 - `email` (String) - Email único da pessoa
 - `idade` (int) - Idade da pessoa
+- `cidade` (String) - Cidade onde a pessoa reside
 - `tarefas` (TarefasModel) - Tarefa associada à pessoa (relacionamento Many-to-One)
 
 **Tabela:** `tb_cadastro_de_pessoa`
@@ -72,7 +79,40 @@ Representa uma tarefa cadastrada no sistema.
 
 **Tabela:** `tb_cadastro_tarefas`
 
+## 📦 DTOs (Data Transfer Objects)
+
+O projeto utiliza DTOs para transferência de dados entre as camadas, seguindo boas práticas de arquitetura.
+
+### PessoaDTO
+DTO utilizado para transferência de dados de Pessoa.
+
+**Campos:**
+- `id` (Long)
+- `nome` (String)
+- `email` (String)
+- `idade` (int)
+- `cidade` (String)
+- `tarefas` (TarefasModel)
+
+### TarefasDTO
+DTO utilizado para transferência de dados de Tarefa.
+
+**Campos:**
+- `id` (Long)
+- `nome` (String)
+- `dificuldade` (String)
+- `pessoas` (List<PessoaModel>)
+
+## 🔄 Mappers
+
+O projeto utiliza Mappers para conversão entre DTOs e Models:
+
+- **PessoaMapper** - Converte entre `PessoaDTO` e `PessoaModel`
+- **TarefasMapper** - Converte entre `TarefasDTO` e `TarefasModel`
+
 ## 🔌 Endpoints da API
+
+> 💡 **Dica:** Todos os endpoints podem ser testados através do **Swagger UI** em `http://localhost:8080/swagger-ui/index.html#/`
 
 ### Pessoas
 
@@ -85,9 +125,17 @@ Content-Type: application/json
   "nome": "João Silva",
   "email": "joao@email.com",
   "idade": 30,
+  "cidade": "São Paulo",
   "tarefas": {
     "id": 1
   }
+}
+```
+
+**Resposta:**
+```json
+{
+  "message": "Pessoa criada com sucesso: João Silva"
 }
 ```
 
@@ -96,9 +144,50 @@ Content-Type: application/json
 GET /pessoas/listar
 ```
 
+**Resposta:**
+```json
+[
+  {
+    "id": 1,
+    "nome": "João Silva",
+    "email": "joao@email.com",
+    "idade": 30,
+    "cidade": "São Paulo",
+    "tarefas": {
+      "id": 1,
+      "nome": "Desenvolvimento",
+      "dificuldade": "Média"
+    }
+  }
+]
+```
+
 #### Buscar Pessoa por ID
 ```
 GET /pessoas/listar/{id}
+```
+
+**Resposta (sucesso):**
+```json
+{
+  "id": 1,
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "idade": 30,
+  "cidade": "São Paulo",
+  "tarefas": {
+    "id": 1,
+    "nome": "Desenvolvimento",
+    "dificuldade": "Média"
+  }
+}
+```
+
+**Resposta (não encontrado):**
+```json
+{
+  "message": "ID não encontrado"
+}
 ```
 
 #### Atualizar Pessoa
@@ -110,9 +199,31 @@ Content-Type: application/json
   "nome": "João Silva Atualizado",
   "email": "joao.novo@email.com",
   "idade": 31,
+  "cidade": "Rio de Janeiro",
   "tarefas": {
     "id": 1
   }
+}
+```
+
+**Resposta (sucesso):**
+```json
+{
+  "id": 1,
+  "nome": "João Silva Atualizado",
+  "email": "joao.novo@email.com",
+  "idade": 31,
+  "cidade": "Rio de Janeiro",
+  "tarefas": {
+    "id": 1
+  }
+}
+```
+
+**Resposta (não encontrado):**
+```json
+{
+  "message": "ID não encontrado"
 }
 ```
 
@@ -121,17 +232,66 @@ Content-Type: application/json
 DELETE /pessoas/deletar/{id}
 ```
 
+**Resposta (sucesso):**
+```json
+{
+  "message": "Usuario(a): João Silva deletada com sucesso"
+}
+```
+
+**Resposta (não encontrado):**
+```json
+{
+  "message": "Id não encontrado para deleção"
+}
+```
+
 ### Tarefas
 
 #### Criar Tarefa
 ```
 POST /tarefas/criar
+Content-Type: application/json
+
+{
+  "nome": "Desenvolvimento de API",
+  "dificuldade": "Alta"
+}
 ```
-*Nota: Endpoint em desenvolvimento*
+
+**Resposta:**
+```json
+{
+  "id": 1,
+  "nome": "Desenvolvimento de API",
+  "dificuldade": "Alta",
+  "pessoas": []
+}
+```
 
 #### Listar Todas as Tarefas
 ```
 GET /tarefas/listar
+```
+
+**Resposta:**
+```json
+[
+  {
+    "id": 1,
+    "nome": "Desenvolvimento de API",
+    "dificuldade": "Alta",
+    "pessoas": [
+      {
+        "id": 1,
+        "nome": "João Silva",
+        "email": "joao@email.com",
+        "idade": 30,
+        "cidade": "São Paulo"
+      }
+    ]
+  }
+]
 ```
 
 #### Buscar Tarefa por ID
@@ -139,17 +299,70 @@ GET /tarefas/listar
 GET /tarefas/listar/{id}
 ```
 
+**Resposta:**
+```json
+{
+  "id": 1,
+  "nome": "Desenvolvimento de API",
+  "dificuldade": "Alta",
+  "pessoas": []
+}
+```
+
 #### Atualizar Tarefa
 ```
-PUT /tarefas/alterarID
+PUT /tarefas/alterar/{id}
+Content-Type: application/json
+
+{
+  "nome": "Desenvolvimento de API REST",
+  "dificuldade": "Média"
+}
 ```
-*Nota: Endpoint em desenvolvimento*
+
+**Resposta:**
+```json
+{
+  "id": 1,
+  "nome": "Desenvolvimento de API REST",
+  "dificuldade": "Média",
+  "pessoas": []
+}
+```
 
 #### Deletar Tarefa
 ```
-DELETE /tarefas/deletarID
+DELETE /tarefas/deletar/{id}
 ```
-*Nota: Endpoint em desenvolvimento*
+
+**Resposta:** `204 No Content` (sem corpo de resposta)
+
+## 📚 Documentação Swagger
+
+A API está documentada com **Swagger/OpenAPI** e pode ser acessada através da interface interativa:
+
+### Acessar Swagger UI
+
+Após iniciar a aplicação, acesse:
+
+**URL:** `http://localhost:8080/swagger-ui/index.html#/`
+
+### Recursos do Swagger
+
+- 📖 Visualização completa de todos os endpoints
+- 🧪 Teste interativo de todas as rotas
+- 📋 Visualização dos modelos de dados (DTOs e Models)
+- 🔍 Documentação automática dos parâmetros e respostas
+- ✅ Validação de requisições em tempo real
+
+### Screenshots do Swagger
+
+> 📸 **Espaço para adicionar screenshots do Swagger UI:**
+> 
+> - Tela inicial do Swagger mostrando todos os endpoints
+> - Exemplo de teste de endpoint de criação de pessoa
+> - Exemplo de teste de endpoint de listagem de tarefas
+> - Visualização dos modelos de dados
 
 ## ⚙️ Configuração
 
@@ -214,6 +427,7 @@ O arquivo de configuração está localizado em `src/main/resources/application.
 
 5. **Acesse a aplicação**:
    - API Base URL: `http://localhost:8080`
+   - **Swagger UI:** `http://localhost:8080/swagger-ui/index.html#/`
    - H2 Console: `http://localhost:8080/h2-console`
 
 ## 🧪 Testes
@@ -228,21 +442,24 @@ Execute os testes com:
 - O projeto utiliza **Lombok** para reduzir código boilerplate (getters, setters, construtores)
 - O banco de dados **H2** é usado em memória, ideal para desenvolvimento e testes
 - O **Flyway** está configurado para gerenciar migrações do banco de dados
-- Alguns endpoints de Tarefas ainda estão em desenvolvimento (retornam mensagens de texto)
+- O projeto utiliza **DTOs** para separação de responsabilidades entre camadas
+- **Mappers** são utilizados para conversão entre DTOs e Models
+- A API está totalmente documentada com **Swagger/OpenAPI**
 
 ## 🔄 Próximos Passos
 
-- [ ] Implementar completamente os endpoints de criação, atualização e deleção de tarefas
 - [ ] Adicionar autenticação JWT
-- [ ] Implementar tratamento de erros personalizado
+- [ ] Implementar tratamento de erros personalizado com Exception Handlers
 - [ ] Adicionar testes unitários e de integração
-- [ ] Documentar API com Swagger/OpenAPI
-- [ ] Implementar DTOs
+- [ ] Implementar validações com Bean Validation
+- [ ] Adicionar paginação nas listagens
+- [ ] Implementar filtros e busca avançada
 
 ## 👤 Autor
 
 Projeto desenvolvido para fins de estudo e consolidação de conhecimentos em Spring Boot e desenvolvimento backend.
--Giuliano M 
+
+**Giuliano M**
 
 ---
 
